@@ -37,12 +37,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         sudo \
         supervisor \
         jq \
+        libnss3 \
         iputils-ping \
         build-essential \
         zlib1g-dev \
         gettext \
         liblttng-ust0 \
         libcurl4-openssl-dev \
+        wget \
         openssh-client && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
@@ -82,6 +84,12 @@ RUN GH_RUNNER_VERSION=${GH_RUNNER_VERSION:-$(curl --silent "https://api.github.c
     && chown -R root: /home/runner \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain none -y
+ENV PATH "/root/.cargo/bin:${PATH}"
+COPY install_browsers.sh /install_browsers.sh
+RUN chmod +x /install_browsers.sh
+RUN /install_browsers.sh && rm /install_browsers.sh
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
