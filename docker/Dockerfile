@@ -45,7 +45,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         liblttng-ust0 \
         libcurl4-openssl-dev \
         wget \
-        openssh-client && \
+        openssh-client \
+        gcc g++ libssl-dev make cmake clang pkg-config && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
