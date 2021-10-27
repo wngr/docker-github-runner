@@ -46,7 +46,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libcurl4-openssl-dev \
         wget \
         openssh-client \
-        gcc g++ libssl-dev make cmake clang pkg-config && \
+        gcc g++ libssl-dev make cmake clang pkg-config \
+        ninja-build libgtk-3-dev && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
@@ -91,6 +92,14 @@ ENV PATH "/root/.cargo/bin:${PATH}"
 COPY install_browsers.sh /install_browsers.sh
 RUN chmod +x /install_browsers.sh
 RUN /install_browsers.sh && rm /install_browsers.sh
+
+# Flutter
+RUN mkdir -p /opt && \
+    cd /opt && \
+    wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_2.5.3-stable.tar.xz && \
+   tar xf flutter_linux_2.5.3-stable.tar.xz && \
+   rm flutter_linux_2.5.3-stable.tar.xz
+ENV PATH "/opt/flutter/bin:${PATH}"
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
